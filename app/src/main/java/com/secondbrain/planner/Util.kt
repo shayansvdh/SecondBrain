@@ -1,7 +1,7 @@
 package com.secondbrain.planner
 
 import android.icu.util.Calendar
-import android.icu.util.PersianCalendar
+import android.icu.util.ULocale
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -48,16 +48,16 @@ private fun zone(): ZoneId = ZoneId.systemDefault()
 
 fun today(): Long = LocalDate.now().toEpochDay()
 
-fun pc(day: Long): PersianCalendar {
-    val c = PersianCalendar()
+fun pc(day: Long): Calendar {
+    val c = Calendar.getInstance(ULocale("fa_IR@calendar=persian"))
     c.timeInMillis = LocalDate.ofEpochDay(day).atStartOfDay(zone()).toInstant().toEpochMilli()
     return c
 }
 
-fun dayOf(c: PersianCalendar): Long =
+fun dayOf(c: Calendar): Long =
     Instant.ofEpochMilli(c.timeInMillis).atZone(zone()).toLocalDate().toEpochDay()
 
-fun monthBase(offset: Int): PersianCalendar {
+fun monthBase(offset: Int): Calendar {
     val c = pc(today())
     c.set(Calendar.DAY_OF_MONTH, 1)
     c.add(Calendar.MONTH, offset)
